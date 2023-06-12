@@ -46,8 +46,11 @@ class Komik extends BaseController
 
     public function create()
     {
+
+        // session();
         $data = [
-            'title' => 'Tambah Data Komik | Sannin Studio'
+            'title' => 'Tambah Data Komik | Sannin Studio',
+            'validation' => \Config\Services::validation()
         ];
 
         return view('komik/create', $data);
@@ -55,6 +58,44 @@ class Komik extends BaseController
 
     public function save()
     {
+
+        //validasi input
+        if (!$this->validate([
+            'judul' => [
+                'rules' =>  'required|is_unique[komik.judul]',
+                'errors' => [
+                    'required' => '{field} Komik harus diisi!',
+                    'is_unique' => '{field} sudah pernah digunakan'
+                ]
+            ],
+
+            'penulis' => [
+                'rules' =>  'required[komik.penulis]',
+                'errors' => [
+                    'required' => '{field} Komik harus diisi!'
+                ]
+            ],
+
+            'penerbit' => [
+                'rules' =>  'required[komik.penerbit]',
+                'errors' => [
+                    'required' => '{field} Komik harus diisi!'
+                ]
+            ],
+
+            'sampul' => [
+                'rules' =>  'required[komik.sampul]',
+                'errors' => [
+                    'required' => '{field} Komik harus diisi!'
+                ]
+            ]
+
+        ])) {
+            $validation = \Config\Services::validation();
+
+            return redirect()->back()->withInput()->with('validation', $validation);
+        }
+
         $slug = url_title($this->request->getVar('judul'), '-', true);
         $this->komikModel->save([
             'judul' => $this->request->getVar('judul'),
