@@ -33,7 +33,7 @@
                 <div class="row mb-3">
                     <label for="penulis" class="col-sm-2 col-form-label">Penulis</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control <?= (session('validation')) ? 'is-invalid' : ''; ?>"" id=" penulis" name="penulis" value="<?= (old('penulis')) ? old('penulis') : $komik['penulis'] ?>">
+                        <input type="text" class="form-control <?= (session('validation')) ? 'is-invalid' : ''; ?>" id=" penulis" name="penulis" value="<?= (old('penulis')) ? old('penulis') : $komik['penulis'] ?>">
                         <!-- start notif validasi -->
                         <?php if (session('validation') && session('validation')->hasError('penulis')) : ?>
                             <div class="invalid-feedback">
@@ -46,7 +46,7 @@
                 <div class="row mb-3">
                     <label for="penerbit" class="col-sm-2 col-form-label">Penerbit</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control <?= (session('validation')) ? 'is-invalid' : ''; ?>"" id=" penerbit" name="penerbit" value="<?= (old('penerbit')) ? old('penerbit') : $komik['penerbit'] ?>">
+                        <input type="text" class="form-control <?= (session('validation')) ? 'is-invalid' : ''; ?>" id=" penerbit" name="penerbit" value="<?= (old('penerbit')) ? old('penerbit') : $komik['penerbit'] ?>">
                         <!-- start notif validasi -->
                         <?php if (session('validation') && session('validation')->hasError('penerbit')) : ?>
                             <div class="invalid-feedback">
@@ -59,7 +59,7 @@
                 <div class="row mb-3">
                     <label for="sampul" class="col-sm-2 col-form-label">Sampul</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control <?= (session('validation')) ? 'is-invalid' : ''; ?>"" id=" sampul" name="sampul" value="<?= (old('sampul')) ? old('sampul') : $komik['sampul'] ?>">
+                        <input type="text" class="form-control <?= (session('validation')) ? 'is-invalid' : ''; ?>" id=" sampul" name="sampul" value="<?= (old('sampul')) ? old('sampul') : $komik['sampul'] ?>">
                         <!-- start notif validasi -->
                         <?php if (session('validation') && session('validation')->hasError('sampul')) : ?>
                             <div class="invalid-feedback">

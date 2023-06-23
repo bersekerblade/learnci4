@@ -70,30 +70,51 @@ class Komik extends BaseController
             ],
 
             'penulis' => [
-                'rules' =>  'required[komik.penulis]',
+                'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Komik harus diisi!'
                 ]
             ],
 
             'penerbit' => [
-                'rules' =>  'required[komik.penerbit]',
+                'rules' => 'required',
                 'errors' => [
                     'required' => '{field} Komik harus diisi!'
                 ]
             ],
 
             'sampul' => [
-                'rules' =>  'required[komik.sampul]',
+                'rules' => 'max_size[sampul,1024]|is_image[sampul]|mime_in[sampul,image/jpg,image/jpeg,image/png]',
                 'errors' => [
-                    'required' => '{field} Komik harus diisi!'
+                    'max_size' => 'ukuran tidak boleh lebih dari 1 mb',
+                    'mime_in' => 'format hanya jpg jpeg dan png',
+                    'is_image' => 'harus gambar'
                 ]
             ]
 
         ])) {
-            $validation = \Config\Services::validation();
 
-            return redirect()->back()->withInput()->with('validation', $validation);
+            //$validation = \Config\Services::validation();
+            //return redirect()->back()->withInput()->with('validation', $validation);
+
+            return redirect()->to('/komik/create')->withInput();
+        }
+
+        //ambil sampul
+        $fileSampul = $this->request->getFile('sampul');
+
+        //apakah ada file gambar yg diupload
+        if ($fileSampul->getError() == 4) {
+            $namaSampul = 'default.jpg';
+        } else {
+            //generate nama sampul random
+            $namaSampul = $fileSampul->getRandomName();
+
+            //pindah sampul ke folder public img
+            $fileSampul->move('img', $namaSampul);
+
+            //ambil nama file sampul untuk disimpan di db menggunakan nama file asli
+            //$namaSampul = $fileSampul->getName();
         }
 
         $slug = url_title($this->request->getVar('judul'), '-', true);
@@ -102,7 +123,7 @@ class Komik extends BaseController
             'slug' => $slug,
             'penulis' => $this->request->getVar('penulis'),
             'penerbit' => $this->request->getVar('penerbit'),
-            'sampul' => $this->request->getVar('sampul'),
+            'sampul' => $namaSampul
         ]);
 
         session()->setFlashdata('pesan', 'Data Berhasil Ditambahkan!');
