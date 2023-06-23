@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="custom-file">
-                            <input type="file" id="sampul" name="sampul" class="custom-file-input <?= (session('validation')) ? 'is-invalid' : ''; ?>">
+                            <input type="file" id="sampul" name="sampul" class="custom-file-input <?= (session('validation')) ? 'is-invalid' : ''; ?>" onchange="previewImg()">
                             <!-- start notif validasi -->
                             <?php if (session('validation') && session('validation')->hasError('sampul')) : ?>
                                 <div class="invalid-feedback">
@@ -61,11 +61,15 @@
                                 </div>
                             <?php endif; ?>
                             <!-- end notif validasi -->
-                            <label class="custom-file-label" for="Sampul">pilih gambar</label>
+                            <label class="custom-file-label" for="sampul">pilih gambar</label>
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Tambah Data</button>
+                <div class="row mb-3">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Tambah Data</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

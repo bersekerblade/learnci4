@@ -133,6 +133,15 @@ class Komik extends BaseController
 
     public function delete($id)
     {
+        //cari gambar berdasrkan id
+        $komik = $this->komikModel->find($id);
+
+        //cek gambar default
+        if ($komik['sampul'] != 'default.jpg') {
+            //hapus gambar di dalam folder img
+            unlink('img/' . $komik['sampul']);
+        }
+
         $this->komikModel->delete($id);
         session()->setFlashdata('pesan', 'Data Berhasil Dihapus!');
         return redirect()->to('/komik');
@@ -185,15 +194,31 @@ class Komik extends BaseController
             ],
 
             'sampul' => [
-                'rules' =>  'required[komik.sampul]',
+                'rules' => 'max_size[sampul,1024]|is_image[sampul]|mime_in[sampul,image/jpg,image/jpeg,image/png]',
                 'errors' => [
-                    'required' => '{field} Komik harus diisi!'
+                    'max_size' => 'ukuran tidak boleh lebih dari 1 mb',
+                    'mime_in' => 'format hanya jpg jpeg dan png',
+                    'is_image' => 'harus gambar'
                 ]
             ]
 
         ])) {
-            $validation = \Config\Services::validation();
-            return redirect()->to('komik/edit/' . $this->request->getVar('slug'))->withInput()->with('validation', $validation);
+
+            return redirect()->to('komik/edit/' . $this->request->getVar('slug'))->withInput();
+        }
+
+        $fileSampul = $this->request->getFile('sampul');
+
+        //cek gambar, apa tetap gambar lama
+        if ($fileSampul->getError() == 4) {
+            $namaSampul = $this->request->getVar('sampulLama');
+        } else {
+            //generate file random
+            $namaSampul = $fileSampul->getRandomName();
+            //pindahkan gambar
+            $fileSampul->move('img', $namaSampul);
+            //hapus file lama
+            unlink('img/' . $this->request->getVar('sampulLama'));
         }
 
         $slug = url_title($this->request->getVar('judul'), '-', true);
@@ -203,7 +228,7 @@ class Komik extends BaseController
             'slug' => $slug,
             'penulis' => $this->request->getVar('penulis'),
             'penerbit' => $this->request->getVar('penerbit'),
-            'sampul' => $this->request->getVar('sampul'),
+            'sampul' => $namaSampul,
         ]);
 
         session()->setFlashdata('pesan', 'Data Berhasil Diubah!');
