@@ -94,10 +94,10 @@ class Komik extends BaseController
 
         ])) {
 
-            //$validation = \Config\Services::validation();
-            //return redirect()->back()->withInput()->with('validation', $validation);
+            $validation = \Config\Services::validation();
+            return redirect()->back()->withInput()->with('validation', $validation);
 
-            return redirect()->to('/komik/create')->withInput();
+            //return redirect()->to('/komik/create')->withInput();
         }
 
         //ambil sampul
